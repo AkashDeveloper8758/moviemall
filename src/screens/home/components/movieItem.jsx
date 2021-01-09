@@ -1,9 +1,17 @@
 import React from "react";
+import {useHistory } from "react-router-dom";
 import "../../../index.css";
 // import styles from "../../../styles/poster.module.css"
 function MovieItem({ posterImage, title, rating, id, backDropPath,date}) {
+  const linkUrl = "/movie/"+id;
+  const history = useHistory()
+
+  const handleOnClick = () =>{
+    history.replace(linkUrl)
+  }
+  
   return (
-    <div className="movieItem">
+    <div className="movieItem" onClick={handleOnClick}>
       <div className='relative'>
           <img
             className=" object-cover w-full h-full rounded-lg "
