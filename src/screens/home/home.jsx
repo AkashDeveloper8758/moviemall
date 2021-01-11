@@ -142,13 +142,13 @@ function HomeScreen() {
             heading={"Popular >>"}
             url={routeConstants.POPULAR_ROUTE}
           />
-          <MovieGrid movies={popularMovies && popularMovies.slice(0, 5)} />
+          <MovieGrid movies={popularMovies && popularMovies.slice(1, 6)} />
 
           <HeadingElement
             heading={"Top Rated >>"}
             url={routeConstants.TOP_RATED_ROUTE}
           />
-          <MovieGrid movies={topRatedMovies && topRatedMovies.slice(0, 5)} />
+          <MovieGrid movies={topRatedMovies && topRatedMovies.slice(3, 8)} />
         </div>
       </div>
     </Fragment>

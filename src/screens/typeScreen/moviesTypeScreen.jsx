@@ -1,19 +1,21 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import MovieGrid from "../home/components/movieGrid";
-import {GlobalContext} from '../../GlobalStates'
+import { GlobalContext } from "../../GlobalStates";
+import { movieType } from "../../defaultConstants";
 
-function MovieTypeScreen({movieType}) {
+function MovieTypeScreen({ localMovieType }) {
+  const { moviesGlobal } = useContext(GlobalContext);
+  var moviesSpecific = moviesGlobal[localMovieType];
+  console.log("[type] movies specific are  : ", moviesSpecific);
+  console.log("[type] movies are  : ", localMovieType);
 
-    const {moviesGlobal} = useContext(GlobalContext);
-    const moviesSpecific = moviesGlobal[movieType];
-    console.log('[type] movies specific are  : ',moviesSpecific)
-    console.log('[type] movies are  : ',movieType)
+  window.scrollTo(0, 0);
 
   return (
-  <div className='pt-12'>
-      <MovieGrid movies={moviesSpecific} />
-  </div>
-    )
+    <div className="pt-12">
+      <MovieGrid movies= {localMovieType === movieType.TOP_RATED ? moviesSpecific.slice(3) :  moviesSpecific} />
+    </div>
+  );
 }
 
 export default MovieTypeScreen;

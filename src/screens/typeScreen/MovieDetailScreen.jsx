@@ -6,9 +6,13 @@ import { movieAPIS, TMDB_BASE_URL } from "../../defaultConstants";
 
 function MovieDetail({ movieId }) {
   const [isLoading, setLoading] = useState(true);
-  const [movieDetail, setMovieDetail] = useState({ gernes: [], rating: 0,productionCompanies:[] });
+  const [movieDetail, setMovieDetail] = useState({
+    gernes: [],
+    rating: 0,
+    productionCompanies: [],
+  });
   const [similarMovies, setSimilarMovies] = useState([]);
-
+  const [isMoreActive, setMoveActive] = useState(false);
 
   async function fetchMovieFromResult(moviesResult) {
     var posterPath =
@@ -63,8 +67,7 @@ function MovieDetail({ movieId }) {
   function fetchSimilarMovieData(moviesResult) {
     var moviesSimilarList = [];
     moviesResult.forEach((item) => {
-      var posterPath =
-        "http://image.tmdb.org/t/p/w400" + item["poster_path"];
+      var posterPath = "http://image.tmdb.org/t/p/w400" + item["poster_path"];
       var id = item["id"];
       var title = item["original_title"];
       var overview = item["overview"];
@@ -133,14 +136,18 @@ function MovieDetail({ movieId }) {
       ></iframe>
     </div>
   );
-  const CompanyLogoComp = ({logo,name}) => (
-      <div className="flex flex-col items-center m-4">
-      <div className='w-20 h-20 relative object-cover items-center rounded-full p-2 bg-white'>
-          <img className='m-auto block absolute top-0 bottom-0 right-0 left-0 p-2' src={logo} alt='company images'></img>
+  const CompanyLogoComp = ({ logo, name }) => (
+    <div className="flex flex-col items-center m-4">
+      <div className="w-20 h-20 relative object-cover items-center rounded-full p-2 bg-white">
+        <img
+          className="m-auto block absolute top-0 bottom-0 right-0 left-0 p-2"
+          src={logo}
+          alt="company images"
+        ></img>
       </div>
       <p className="text-white text-lg">{name}</p>
-      </div>
-  )
+    </div>
+  );
   //   console.log('main gernes global are: ',movieDetail.gernes)
 
   const LoadingComponent = () => (
@@ -150,33 +157,33 @@ function MovieDetail({ movieId }) {
   );
 
   const GerneButton = ({ text }) => (
-    <div className="text-center bg-red-500 rounded-sm text-white mr-2 px-2 py-1">
+    <div className="text-center bg-red-500 rounded-sm text-white mb-1 mr-2 px-2 py-1">
       {text}
     </div>
   );
-  const RecommendationsButtons = ({ text }) => (
-    <div className="text-center bg-red-500 rounded-sm hover:cursor-pointer text-white px-4 m-2 py-1 hover:bg-red-600">
-      {text}
-    </div>
-  );
+  // const RecommendationsButtons = ({ text }) => (
+  //   <div className="text-center bg-red-500 rounded-sm hover:cursor-pointer text-white px-4 m-2 py-1 hover:bg-red-600">
+  //     {text}
+  //   </div>
+  // );
   const MoreButton = ({ text }) => (
-    <div className="text-center  bg-gray-600 rounded-sm text-white px-8 py-2 hover:bg-gray-800 hover:cursor-pointer ">
+    <div onClick={()=>setMoveActive(!isMoreActive)} className="text-center  bg-gray-600 rounded-sm text-white px-8 py-2 hover:bg-gray-800 hover:cursor-pointer ">
       {text}
     </div>
   );
 
   const PosterGroup = () => (
-    <div className=" flex lg:flex-row flex-col align-middle ">
-      <div className="movieImage__detail xsm:w-full sm:w-1/2 lg:w-1/3 object-contain">
+    <div className=" flex lg:flex-row flex-col items-start ">
+      <div className="w-72 h-auto object-contain p-1 sm:w-1/2 lg:w-1/3 ">
         <img
           src={movieDetail.posterPath}
           className="w-full h-full object-contain"
           alt="movie"
         ></img>
       </div>
-      <div className="flex flex-col justify-start m-4 pl-8 lg:max-w-2/3">
+      <div className="flex flex-col justify-start mt-2 m-1 p-1  lg:pl-8 lg:max-w-2/3">
         <h1 className="text-white text-6xl">{movieDetail.title}</h1>
-        <div className="flex justify-start mt-4">
+        <div className="flex justify-start mt-4 flex-wrap ">
           {movieDetail.gernes.map((item) => {
             return <GerneButton key={item["id"]} text={item["name"]} />;
           })}
@@ -192,70 +199,67 @@ function MovieDetail({ movieId }) {
           <p className="text-white text-lg ml-2">{movieDetail.rating}</p>
         </div>
         <p className="text-blue-300 text-lg font-bold mt-2 ">
-          {" ❤ "+movieDetail.tagline}
+          {" ❤ " + movieDetail.tagline}
         </p>
         <p className="text-gray-300 text-xl font-light mt-4">
           {movieDetail.overview}
         </p>
+        <ProductionCompanies />
+
       </div>
     </div>
   );
-   
+
   const ProductionCompanies = () => (
-      <div className='m-8 p-2 flex justify-center'>
-          {movieDetail.productionCompanies.map((company)=>{
-              console.log("images : ",movieAPIS.IMAGE_BASE_PATH+company["logo_path"])
-              if(company["logo_path"] != null)         
-              return <CompanyLogoComp logo={movieAPIS.IMAGE_BASE_PATH+company["logo_path"]} name={company["name"]} />
-              else return <div></div>
-          })}
-      </div>
-  )
+    <div className="mt-4 m-1  flex justify-start xsm:justify-center overflow-x-auto">
+      {movieDetail.productionCompanies.map((company) => {
+        console.log(
+          "images : ",
+          movieAPIS.IMAGE_BASE_PATH + company["logo_path"]
+        );
+        if (company["logo_path"] != null)
+          return (
+            <CompanyLogoComp
+              logo={movieAPIS.IMAGE_BASE_PATH + company["logo_path"]}
+              name={company["name"]}
+            />
+          );
+        else return <div></div>;
+      })}
+    </div>
+  );
 
   const Recommendations = () => {
     return (
-      <div className="mt-4">
-        <p className="text-white text-2xl "> similar movies </p>
+      <div className="mt-8">
+        <p className="text-white text-3xl "> Similar movies 🍎 </p>
         <div className="grid grid-flow-row lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 ">
-          {similarMovies.slice(0,4).map((movie) => {
-            return (
-              <MovieItem
-              key={movie.id}
-                posterImage={movie.posterPath}
-                date={movie.releaseDate}
-                id={movie.id}
-                rating={movie.rating}
-                title={movie.title}
-              />
-            );
-          })}
-          {/* <MovieItem
-            posterImage={imageTest}
-            date="12-02-2021"
-            id="43534"
-            rating="5.6"
-            title="Black Widow"
-          /> */}
-
+          {isMoreActive
+            ? similarMovies.map((movie) => (
+                <MovieItem
+                  key={movie.id}
+                  posterImage={movie.posterPath}
+                  date={movie.releaseDate}
+                  id={movie.id}
+                  rating={movie.rating}
+                  title={movie.title}
+                />
+              ))
+            : similarMovies.slice(0, 4).map((movie) => {
+                return (
+                  <MovieItem
+                    key={movie.id}
+                    posterImage={movie.posterPath}
+                    date={movie.releaseDate}
+                    id={movie.id}
+                    rating={movie.rating}
+                    title={movie.title}
+                  />
+                );
+              })}
         </div>
         <div className="flex justify-center my-4 ">
-          <MoreButton text="More + " />
-        </div>
-        <div className="flex flex-wrap justify-start">
-          <RecommendationsButtons text="The Avengers" />
-          <RecommendationsButtons text="A beautiful mind" />
-          <RecommendationsButtons text="Shawshank redumption" />
-          <RecommendationsButtons text="Life is beautiful" />
-          <RecommendationsButtons text="King s man" />
-          <RecommendationsButtons text="The monstor hunters" />
-          <RecommendationsButtons text="Sprited away" />
-          <RecommendationsButtons text="kungfu panda 3" />
-          <RecommendationsButtons text="Shawshank redumption" />
-          <RecommendationsButtons text="Life is beautiful" />
-          <RecommendationsButtons text="King s man" />
-          <RecommendationsButtons text="The monstor hunters" />
-          <RecommendationsButtons text="Sprited away" />
-          <RecommendationsButtons text="kungfu panda 3" />
+          <MoreButton  text= {isMoreActive ? 'Less' : "More + "} />
         </div>
       </div>
     );
@@ -270,7 +274,6 @@ function MovieDetail({ movieId }) {
           <YoutubeFrame />
           <div className="mx-4 md:mx-8 lg-mx-12">
             <PosterGroup />
-            <ProductionCompanies />
             <Recommendations />
           </div>
         </div>

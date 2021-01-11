@@ -21,10 +21,10 @@ function App() {
             <Route path='/' exact component={HomeScreen} />
             <Route path='/home' component={HomeScreen} />
             <Route exact path='/movie/:id' render ={(props) => <MovieDetail movieId={props.match.params.id} /> } />
-            <Route path= {routeConstants.POPULAR_ROUTE} render={() => <MovieTypeScreen movieType={movieType.POPULAR_NOW} />} />
-            <Route path={routeConstants.TOP_RATED_ROUTE} render={() => <MovieTypeScreen movieType={movieType.TOP_RATED} />} />
-            <Route path={routeConstants.PLAYING_NOW_ROUTE} render={() => <MovieTypeScreen movieType={movieType.PLAYING_NOW} />} />
-            <Route path={routeConstants.UPCOMMING_ROUTE} render={() => <MovieTypeScreen movieType={movieType.UPCOMMING_MOVIES} />} />
+            <Route path= {routeConstants.POPULAR_ROUTE} render={() => <MovieTypeScreen localMovieType={movieType.POPULAR_NOW} />} />
+            <Route path={routeConstants.TOP_RATED_ROUTE} render={() => <MovieTypeScreen localMovieType={movieType.TOP_RATED} />} />
+            <Route path={routeConstants.PLAYING_NOW_ROUTE} render={() => <MovieTypeScreen localMovieType={movieType.PLAYING_NOW} />} />
+            <Route path={routeConstants.UPCOMMING_ROUTE} render={() => <MovieTypeScreen localMovieType={movieType.UPCOMMING_MOVIES} />} />
             {/* <Route path='/movie/:id' component={MovieScreen} /> */}
           </Switch>
         </Router>
